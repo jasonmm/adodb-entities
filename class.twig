@@ -1,0 +1,11 @@
+{% if namespace != '' %}namespace {{ namespace }};{% endif %}
+
+class {{ className }} {% if baseClass != '' %}extends {{ baseClass }}{% endif %} {
+    public $_table = '{{ tableName }}';
+    {% for v in columns %}
+/**
+     * @var {{ v.dataType }}
+     */
+    public ${{ v.name }};
+    {% endfor %}
+}

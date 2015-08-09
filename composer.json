@@ -1,0 +1,22 @@
+{
+  "name": "jasonmm/adodb-entities",
+  "description": "Create ADODB active record classes from a database structure.",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Jasonmm",
+      "email": "jasonmm.github@gmail.com"
+    }
+  ],
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist"
+  },
+  "require": {
+    "adodb/adodb-php": "dev-master",
+    "ulrichsg/getopt-php": "2.3.*",
+    "twig/twig": "1.9.*"
+
+  }
+}
