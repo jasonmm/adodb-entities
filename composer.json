@@ -17,6 +17,11 @@
     "adodb/adodb-php": "dev-master",
     "ulrichsg/getopt-php": "2.3.*",
     "twig/twig": "1.9.*"
-
+  },
+  "autoload": {
+    "psr-4": {
+      "Jasonmm\\ArCreator\\": ""
+    },
+    "files": ["functions.php"]
   }
 }

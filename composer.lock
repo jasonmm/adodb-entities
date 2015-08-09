@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "80b4f7ecfa83f923f91e4c3a4d32a326",
+    "hash": "44f7c74ffc1dc611e4ec050428b2cc4f",
     "packages": [
         {
             "name": "adodb/adodb-php",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ADOdb/ADOdb.git",
-                "reference": "86bce522c7d985e68c3e898609970fd89bdd4cda"
+                "reference": "52d1725e95ee30f28d4c6a9b3ec72c8e4d4e025f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ADOdb/ADOdb/zipball/86bce522c7d985e68c3e898609970fd89bdd4cda",
-                "reference": "86bce522c7d985e68c3e898609970fd89bdd4cda",
+                "url": "https://api.github.com/repos/ADOdb/ADOdb/zipball/52d1725e95ee30f28d4c6a9b3ec72c8e4d4e025f",
+                "reference": "52d1725e95ee30f28d4c6a9b3ec72c8e4d4e025f",
                 "shasum": ""
             },
             "require": {
@@ -50,7 +50,7 @@
             "keywords": [
                 "database"
             ],
-            "time": "2015-06-28 12:34:07"
+            "time": "2015-08-04 13:36:25"
         },
         {
             "name": "twig/twig",

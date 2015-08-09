@@ -1,15 +1,37 @@
 <?php
 
+use Jasonmm\ArCreator\PromptForPasswordException;
+
 require_once 'vendor/autoload.php';
 
-require_once 'config.php';
+$cfg = getConfig();
 
-$db = ADONewConnection($driver);
-$db->NConnect($hostname, $username, $password, $database);
+try {
+    checkConfig($cfg);
+} catch( PromptForPasswordException $e ) {
+} catch( Exception $e ) {
+    echo $e->getMessage() . "\r\n";
+    exit;
+}
+
+if( is_null($cfg->password) ) {
+    $cfg->password = readline('Enter the database password: ');
+}
+
+$db = ADONewConnection($cfg->driver);
+if( $db === false ) {
+    echo $cfg->driver . " is not a valid database driver.\r\n";
+    exit;
+}
+$ret = $db->NConnect($cfg->hostname, $cfg->username, $cfg->password, $cfg->database);
+if( $ret === false ) {
+    echo "Error connecting to the database.\r\n";
+    exit;
+}
 
 $tables = $db->MetaTables();
 
-foreach ($tables as $index => $classNameFromTableName) {
+foreach( $tables as $index => $classNameFromTableName ) {
     $tables[$index] = array(
         'tableName' => $classNameFromTableName,
     );
@@ -17,26 +39,27 @@ foreach ($tables as $index => $classNameFromTableName) {
     $tables[$index]['columns'] = $db->MetaColumns($classNameFromTableName);
 }
 
-//print_r($tables);
-
-if (!file_exists($outputDirectory)) {
-    mkdir($outputDirectory);
+if( !file_exists($cfg->outputDirectory) ) {
+    $ret = mkdir($cfg->outputDirectory, 0777, true);
+    if( $ret === false ) {
+        echo 'Error creating the directory ' . $cfg->outputDirectory . "\r\n";
+        exit;
+    }
 }
-
 
 $loader = new Twig_Loader_Filesystem('./');
 $twig = new Twig_Environment($loader, []);
 
-foreach ($tables as $tableObj) {
+foreach( $tables as $tableObj ) {
     $className = classNameFromTableName($tableObj['tableName']);
     $table = [
-        'namespace' => $namespace,
+        'namespace' => $cfg->namespace,
         'className' => $className,
         'baseClass' => '',
         'tableName' => $tableObj['tableName'],
         'columns'   => []
     ];
-    foreach ($tableObj['columns'] as $column) {
+    foreach( $tableObj['columns'] as $column ) {
         $c = [
             'name'     => $column->name,
             'dataType' => columnDataType($column),
@@ -46,45 +69,10 @@ foreach ($tables as $tableObj) {
 
     $output = $twig->render('class.twig', $table);
 
-    $fn = $outputDirectory . $className . '.php';
+    $fn = $cfg->outputDirectory . $className . '.php';
     $fp = fopen($fn, 'w');
-    fwrite($fp, "<?php\r\n" . $output);
+    fwrite($fp, "<?php\n" . $output);
     fclose($fp);
 }
 
 
-/**
- * @param ADOFieldObject $column
- *
- * @return string
- */
-function columnDataType(ADOFieldObject $column)
-{
-    $integers = ['tinyint', 'smallint', 'mediumint', 'bigint'];
-    $floats = ['decimal'];
-
-    if (in_array($column->type, $integers)) {
-        return 'int';
-    }
-
-    if (in_array($column->type, $floats)) {
-        return 'float';
-    }
-
-    return 'string';
-}
-
-/**
- * @param string $tableName
- *
- * @return string
- */
-function classNameFromTableName($tableName)
-{
-    $parts = explode('_', $tableName);
-    $parts = array_map(function ($item) {
-        return ucfirst($item);
-    }, $parts);
-
-    return implode('', $parts);
-}
