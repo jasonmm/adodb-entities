@@ -35,4 +35,8 @@ class Configuration
      * @var string
      */
     public $outputDirectory = './';
+    /**
+     * @var bool
+     */
+    public $includeOverrideMethods = false;
 }

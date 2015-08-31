@@ -1,0 +1,28 @@
+
+    /**
+     * @param string $where
+     * @param array $bind
+     * @param bool $lock
+     * @return bool
+     */
+    function Load($where = null, $bind = false, $lock = false) {
+        return parent::Load($where, $bind, $lock);
+    }
+
+    /**
+     * @param string $whereOrderBy
+     * @param array $bind
+     * @param array $pKeys
+     * @param array $extra
+     * @return {{ className }}[]
+     */
+    function Find($whereOrderBy, $bind = false, $pKeys = false, $extra = array()) {
+        return parent::Find($whereOrderBy, $bind, $pKeys, $extra);
+    }
+
+    /**
+     * @return int 0 on error, 1 on update, 2 on insert
+     */
+    function Replace() {
+        return parent::Replace();
+    }

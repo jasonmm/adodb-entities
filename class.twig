@@ -5,11 +5,16 @@ class {{ className }} {% if baseClass != '' %}extends {{ baseClass }}{% endif %}
      * @var string
      */
     public $_table = '{{ tableName }}';
-    {% for v in columns %}
 
+    {% for v in columns %}
     /**
      * @var {{ v.dataType }}
      */
     public ${{ v.name }};
     {% endfor %}
+
+    {% if includeOverrideMethods %}
+        {% include 'override-methods.twig' %}
+    {% endif %}
+
 }

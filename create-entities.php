@@ -1,14 +1,11 @@
 <?php
 
-use Jasonmm\ArCreator\PromptForPasswordException;
-
 require_once 'vendor/autoload.php';
 
 $cfg = getConfig();
 
 try {
     checkConfig($cfg);
-} catch( PromptForPasswordException $e ) {
 } catch( Exception $e ) {
     echo $e->getMessage() . "\r\n";
     exit;
@@ -53,15 +50,16 @@ $twig = new Twig_Environment($loader, []);
 foreach( $tables as $tableObj ) {
     $className = classNameFromTableName($tableObj['tableName']);
     $table = [
-        'namespace' => $cfg->namespace,
-        'className' => $className,
-        'baseClass' => '',
-        'tableName' => $tableObj['tableName'],
-        'columns'   => []
+        'namespace'              => $cfg->namespace,
+        'className'              => $className,
+        'baseClass'              => '\\ADODB_Active_Record',
+        'tableName'              => $tableObj['tableName'],
+        'includeOverrideMethods' => $cfg->includeOverrideMethods,
+        'columns'                => []
     ];
     foreach( $tableObj['columns'] as $column ) {
         $c = [
-            'name'     => $column->name,
+            'name'     => strtolower($column->name),    // ADODB lowercases table column names.
             'dataType' => columnDataType($column),
         ];
         $table['columns'][] = $c;

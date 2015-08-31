@@ -11,7 +11,7 @@ require_once 'vendor/autoload.php';
  * @return string
  */
 function columnDataType(ADOFieldObject $column) {
-    $integers = ['tinyint', 'smallint', 'mediumint', 'bigint'];
+    $integers = ['tinyint', 'smallint', 'mediumint', 'bigint', 'int'];
     $floats = ['decimal'];
 
     if( in_array($column->type, $integers) ) {
@@ -51,11 +51,12 @@ function getConfig() {
         new Option(null, 'database', Getopt::REQUIRED_ARGUMENT),
         new Option('n', 'namespace', Getopt::REQUIRED_ARGUMENT),
         new Option('o', 'outputDirectory', Getopt::REQUIRED_ARGUMENT),
+        new Option(null, 'includeOverrideMethods', Getopt::NO_ARGUMENT),
     ]);
 
     $options->parse();
 
-    $nn = function($v) {
+    $nn = function ($v) {
         return !is_null($v);
     };
 
@@ -66,6 +67,7 @@ function getConfig() {
     $c->database = $nn($options['database']) ? $options['database'] : $c->database;
     $c->namespace = $nn($options['namespace']) ? $options['namespace'] : $c->namespace;
     $c->outputDirectory = $nn($options['outputDirectory']) ? $options['outputDirectory'] : $c->outputDirectory;
+    $c->includeOverrideMethods = $nn($options['includeOverrideMethods']) ? true : false;
 
     return $c;
 }
